@@ -46,6 +46,11 @@ class ViewController: UIViewController, UITextViewDelegate {
             historyText = counterChangeHistory.text
             counterChangeHistory.text = "\(currentDate): значение изменено на -1\n\(historyText)"
             counterChangeLabel.text = "Значение счетчика: \(count)"
+        } else {
+            date.dateFormat = "dd-MM-yyyy HH:mm:ss"
+            let currentDate = date.string(from: Date())
+            historyText = counterChangeHistory.text
+            counterChangeHistory.text = "\(currentDate): попытка уменьшить значение счётчика ниже 0\n\(historyText)"
         }
     // уменьшение счетчика на 1
     }
