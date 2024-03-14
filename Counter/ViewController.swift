@@ -20,11 +20,18 @@ class ViewController: UIViewController, UITextViewDelegate {
         counterButtonIncrease.tintColor = .black
         counterButtonDecrease.tintColor = .black
         counterChangeHistory.delegate = self
+        
         // Do any additional setup after loading the view.
     }
+    func textViewDidChange(_ counterChangeHistory: UITextView) {
+            let cursorPosition = counterChangeHistory.selectedRange.location
+            counterChangeHistory.scrollRangeToVisible(NSMakeRange(counterChangeHistory.text.count - 1, 0))
+            counterChangeHistory.selectedRange = NSMakeRange(cursorPosition, 0)
+        }
+    //реализация прокрутки окна с текстом при добавлении нового текста
     
     private var count = 0
-    private var historyText: String = ""
+    //private var historyText: String = ""
     private let date = DateFormatter()
     // объявляем переменные для работы с историей изменений
     // count - счетчик, historyText - текст до изменения в UITextView, date - дата события
@@ -32,9 +39,7 @@ class ViewController: UIViewController, UITextViewDelegate {
         count += 1
         date.dateFormat = "dd-MM-yyyy HH:mm:ss"
         let currentDate = date.string(from: Date())
-        historyText = counterChangeHistory.text
-        counterChangeHistory.scrollsToTop = true
-        counterChangeHistory.text = "\(currentDate): значение изменено на +1\n\(historyText)"
+        counterChangeHistory.insertText("\n\(currentDate): значение изменено на +1")
         counterChangeLabel.text = "Значение счетчика: \(count)"
     }
     // увеличение счетчика на 1
@@ -43,14 +48,12 @@ class ViewController: UIViewController, UITextViewDelegate {
             count -= 1
             date.dateFormat = "dd-MM-yyyy HH:mm:ss"
             let currentDate = date.string(from: Date())
-            historyText = counterChangeHistory.text
-            counterChangeHistory.text = "\(currentDate): значение изменено на -1\n\(historyText)"
+            counterChangeHistory.insertText("\n\(currentDate): значение изменено на -1")
             counterChangeLabel.text = "Значение счетчика: \(count)"
         } else {
             date.dateFormat = "dd-MM-yyyy HH:mm:ss"
             let currentDate = date.string(from: Date())
-            historyText = counterChangeHistory.text
-            counterChangeHistory.text = "\(currentDate): попытка уменьшить значение счётчика ниже 0\n\(historyText)"
+            counterChangeHistory.insertText("\n\(currentDate): попытка уменьшить значение счетчика ниже 0")
         }
     // уменьшение счетчика на 1
     }
@@ -58,8 +61,7 @@ class ViewController: UIViewController, UITextViewDelegate {
         count = 0
         date.dateFormat = "dd-MM-yyyy HH:mm:ss"
         let currentDate = date.string(from: Date())
-        historyText = counterChangeHistory.text
-        counterChangeHistory.text = "\(currentDate): значение сброшено\n\(historyText)"
+        counterChangeHistory.insertText("\n\(currentDate): значение сброшено")
         counterChangeLabel.text = "Значение счетчика: \(count)"
     }
     // сброс счетчика на 0
